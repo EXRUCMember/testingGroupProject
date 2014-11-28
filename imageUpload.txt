@@ -1,0 +1,40 @@
+  public function add() {
+        if ($this->request->is('Post')) {
+            $this->News->create();
+            $this->request->data['News']['user_id'] = $this->Auth->user('id');
+
+                //Check if image has been uploaded
+
+                if(!empty($this->request->data['News']['image']['name']))
+                {
+                    $file = $this->request->data['News']['image']; //put the data into a var for easy use
+                    $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
+                    $arr_ext = array('jpg', 'jpeg', 'gif' , 'png'); //set allowed extensions
+                    //only process if the extension is valid
+                    if(in_array($ext, $arr_ext))
+                    {
+                        //do the actual uploading of the file. First arg is the tmp name, second arg is
+                        //where we are putting it
+                        move_uploaded_file($file['tmp_name'], WWW_ROOT . 'img/uploads/' . $file['name']);
+
+                        //prepare the filename for database entry
+                        $this->request->data['News']['image'] = $file['name'];
+                    }
+                }
+               else{
+                   $this->request->data['News']['image'] = null;
+               }
+
+                //now do the save
+               if($this->News->save($this->request->data)) {
+                    $this->Session->setFlash(__('Your Image has been saved.'));
+                    return $this->redirect(array('action' => 'index'));
+                } else {
+                    $this->Session->setFlash(__('Your Image has not been saved.'));
+                }
+
+
+
+
+        }
+    }
