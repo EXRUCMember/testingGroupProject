@@ -1,7 +1,7 @@
 Group internship morning for testing project
 ===================
 
-morning Intern testing
+Morning and Afternoon Test project
 
 # This is Seila Statement
 
